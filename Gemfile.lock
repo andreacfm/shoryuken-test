@@ -1,0 +1,30 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    aws-sdk (2.1.32)
+      aws-sdk-resources (= 2.1.32)
+    aws-sdk-core (2.1.32)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.1.32)
+      aws-sdk-core (= 2.1.32)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
+    hitimes (1.2.3)
+    jmespath (1.1.3)
+    rake (10.4.2)
+    shoryuken (2.0.2)
+      aws-sdk-core (~> 2)
+      celluloid (~> 0.16.0)
+    timers (4.0.4)
+      hitimes
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  aws-sdk (~> 2)
+  rake
+  shoryuken
+
+BUNDLED WITH
+   1.10.6
