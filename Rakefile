@@ -24,8 +24,18 @@ namespace :sqs do
   task :drop, [:queue] do |_task, args|
     queue = sqs_client.get_queue_url({ queue_name: args[:queue] })
     puts " >> Deleting queue #{args[:queue]} [#{queue.queue_url}]"
-    sqs_client.delete_queue({queue_url: queue.queue_url })
-    puts " - Done!"
+    sqs_client.delete_queue({ queue_url: queue.queue_url })
+    puts ' - Done!'
+  end
+
+  task :send_message, [:queue, :message] do |_task, args|
+    queue = sqs_client.get_queue_url({ queue_name: args[:queue] })
+    puts " >> Sending message to queue #{args[:queue]} [#{queue.queue_url}]"
+    resp = sqs_client.send_message({
+      queue_url: queue.queue_url, # required
+      message_body: args[:message]
+    })
+    puts " - #{resp.message_id}"
   end
 
 end
