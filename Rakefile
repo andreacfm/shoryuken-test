@@ -18,7 +18,14 @@ namespace :sqs do
   task :list do
     resp = sqs_client.list_queues
     puts ' >> Listing queues'
-    resp.queue_urls.each_with_index { |url, index| puts " #{index + 1} - #{url}" }
+    resp.queue_urls.each_with_index do |url, index|
+      resp = sqs_client.get_queue_attributes({
+        queue_url: url,
+        attribute_names: ['QueueArn']
+      })
+      puts " #{index + 1} - URL -> #{url}"
+      puts "     ARN -> #{resp.attributes['QueueArn']}"
+    end
   end
 
   task :drop, [:queue] do |_task, args|
@@ -53,6 +60,26 @@ namespace :sns do
     resp = sns_client.create_topic({ name: args[:topic] })
     puts ' >> Created topic'
     puts " - #{resp.topic_arn}"
+  end
+
+  task :drop, [:topic_arn] do |task, args|
+    resp = sns_client.delete_topic({ topic_arn: args[:topic_arn] })
+    puts " >> Deleted topic [#{args[:topic_arn]}]"
+  end
+
+  task :list do
+    resp = sns_client.list_topics
+    puts ' >> Listing topics'
+    resp.topics.each_with_index { |topic, index| puts " #{index + 1} - #{topic.topic_arn}" }
+  end
+
+  task :subscribe, [:topic_arn, :queue_arn] do |task,args|
+    resp = sns_client.subscribe({
+      topic_arn: args[:topic_arn],
+      protocol: "sqs",
+      endpoint: args[:queue_arn],
+    })
+    puts " >> Subscribtion ARN - #{resp.subscription_arn}"
   end
 
 end
