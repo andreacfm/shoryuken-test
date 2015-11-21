@@ -39,3 +39,20 @@ namespace :sqs do
   end
 
 end
+
+namespace :sns do
+  def sns_client
+    @sqs ||= Aws::SNS::Client.new(
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region: ENV['AWS_REGION']
+    )
+  end
+
+  task :create, [:topic] do |task, args|
+    resp = sns_client.create_topic({ name: args[:topic] })
+    puts ' >> Created topic'
+    puts " - #{resp.topic_arn}"
+  end
+
+end
