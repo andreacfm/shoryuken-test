@@ -9,6 +9,6 @@ class WorkerZap
   # shoryuken_options body_parser: JSON
 
   def perform(sqs_msg, body)
-    puts "Worker ZAP - got message => #{body['message']}"
+    puts "Worker ZAP - got message => #{body}"
   end
 end
